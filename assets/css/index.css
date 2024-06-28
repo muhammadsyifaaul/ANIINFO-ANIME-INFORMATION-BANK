@@ -16,7 +16,7 @@ a {
     text-decoration: none;
 }
 header {
-    max-width: 900px;
+    max-width: 1000px;
     background: linear-gradient(rgba(54, 53, 53, 0.3),rgba(54, 53, 53, 0.3));
     display: flex;
     align-items: center;
@@ -42,7 +42,7 @@ header h1 {
 }
 
 main {
-    max-width: 900px;
+    max-width: 1000px;
     min-height: 100vh;
     background-color: rgba(0, 0,0,0.5);
     margin: 2rem auto;
@@ -70,4 +70,39 @@ nav ul {
 nav ul li a {
     color: #fff;
     font-size: 0.9rem;
+}
+.right {
+    display: flex;
+    gap: 1rem;
+}
+.search {
+    position: relative;
+    display: inline-block;
+  }
+
+  .search input[type="text"] {
+    padding-right: 30px; /* Sesuaikan dengan lebar ikon */
+  }
+
+  .search i {
+    position: absolute;
+    right: 10px; /* Atur posisi ikon dari sisi kanan */
+    top: 50%; /* Atur posisi vertikal menjadi tengah */
+    transform: translateY(-50%); /* Posisikan ikon tepat di tengah secara vertikal */
+    cursor: pointer;
+  }
+.top-anime {
+    display: flex;
+    justify-content: center;
+    margin: 3rem auto;
+    gap: 3rem;
+}
+.anime-detail {
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.image  img{
+    width: 400px;
 }
