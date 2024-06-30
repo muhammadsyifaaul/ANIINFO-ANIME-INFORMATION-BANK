@@ -45,38 +45,47 @@ const nextItem = document.querySelector('.next-slide');
 const prevItem = document.querySelector('.prev-slide');
 const slider = document.querySelector('.slider-card');
 
-nextItem.addEventListener('click', function () {
+nextItem.addEventListener('click', function() {
     let items = document.querySelectorAll('.card');
-    items.forEach((item) => {
-        item.style.transition = 'transform 1s ease';
-        item.style.transform = 'translateX(100%)';
+    const firstItem = items[0];
+
+
+    slider.appendChild(firstItem);
+
+
+    items.forEach((card) => {
+        card.style.transition = 'none';
+        card.style.transform = 'translateX(0)';
     });
 
-    setTimeout(() => {
-        slider.appendChild(items[0]);
-        items.forEach((item) => {
-            item.style.transition = 'none';
-            item.style.transform = 'translateX(0)';
-        });
-    }, 1000); // Adjust this timeout to match your transition duration
+
+    void slider.offsetWidth;
+
+    items.forEach((card) => {
+        card.style.transition = 'transform 0.5s';
+        card.style.transform = 'translateX(-100%)';
+    });
 });
 
-prevItem.addEventListener('click', function () {
+prevItem.addEventListener('click', function() {
     let items = document.querySelectorAll('.card');
-    slider.insertBefore(items[items.length - 1], items[0]);
+    const lastItem = items[items.length - 1];
 
-    // Force reflow before applying the next transition
-    slider.offsetHeight;
 
-    items.forEach((item) => {
-        item.style.transition = 'none';
-        item.style.transform = 'translateX(-100%)';
+    slider.insertBefore(lastItem, items[0]);
+
+
+    items.forEach((card) => {
+        card.style.transition = 'none';
+        card.style.transform = 'translateX(-100%)';
     });
 
-    setTimeout(() => {
-        items.forEach((item) => {
-            item.style.transition = 'transform 1s ease';
-            item.style.transform = 'translateX(0)';
-        });
-    }, 0); // Adjust this timeout to match your transition duration
+
+    void slider.offsetWidth;
+
+    items.forEach((card) => {
+        card.style.transition = 'transform 0.5s';
+        card.style.transform = 'translateX(0)';
+    });
 });
+
