@@ -89,3 +89,61 @@ prevItem.addEventListener('click', function() {
     });
 });
 
+
+// manage ui with api
+function truncateText(text, maxLength) {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + '...';
+    }
+    return text;
+  }
+const api = 'https://kitsu.io/api/edge/anime';
+axios.get(api)
+.then(res => {
+    
+    const dataUnion = res.data.data;
+    const ratings =dataUnion.map(anime => parseFloat(anime.attributes.averageRating))
+    const maxRating = Math.max(...ratings)
+    const highestRatedAnime = dataUnion.find(anime => parseFloat(anime.attributes.averageRating) === maxRating)
+    const sortedAnimes = dataUnion.sort((a, b) => {
+        return parseFloat(b.attributes.averageRating) - parseFloat(a.attributes.averageRating);
+    });
+    const topAnimes = sortedAnimes.slice(0, 5);
+    console.log(topAnimes)
+    const data = {
+        title: highestRatedAnime.attributes.canonicalTitle,
+        synop: highestRatedAnime.attributes.synopsis,
+        eps: highestRatedAnime.attributes.episodeLength,
+        year: highestRatedAnime.attributes.endDate,
+        img : highestRatedAnime.attributes.coverImage.original
+    }
+    topAnime(data)
+})
+
+function topAnime(data) {
+    const bg = document.querySelector('.top-anime')
+    const animeDetail = document.querySelector('.anime-detail');
+    const image = document.querySelector('.image')
+    const { title, synop, eps, year, img } = data;
+    const truncatedSynopsis = truncateText(synop, 300); // Misalnya, maksimal 200 karakter
+    const dataAnime = `
+      <h1>${title}</h1>
+      <p>${truncatedSynopsis}</p>
+      <ul>
+        <li>Episode: ${eps} Episode</li>
+        <li>Year: ${year}</li>
+        <li>Genre: Romance, Fantasi</li>
+      </ul>
+      <a href="">MORE INFO</a>
+    `;
+    const imageAnime = `
+    <img src="${img}" alt="">
+    `
+    console.log(img)
+    animeDetail.innerHTML = dataAnime;
+    image.innerHTML = imageAnime;
+    bg.style.background = `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${img}')`;
+    bg.style.backgroundRepeat = 'no-repeat';
+    bg.style.backgroundSize = 'cover';
+    bg.style.backgroundPosition = 'center center';
+  }
