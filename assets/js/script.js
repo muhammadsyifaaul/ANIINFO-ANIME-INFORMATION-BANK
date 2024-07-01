@@ -108,8 +108,8 @@ axios.get(api)
     const sortedAnimes = dataUnion.sort((a, b) => {
         return parseFloat(b.attributes.averageRating) - parseFloat(a.attributes.averageRating);
     });
-    const topAnimes = sortedAnimes.slice(0, 5);
-    console.log(topAnimes)
+    const topAnimes = sortedAnimes.slice(1, 6);
+    
     const data = {
         title: highestRatedAnime.attributes.canonicalTitle,
         synop: highestRatedAnime.attributes.synopsis,
@@ -117,10 +117,12 @@ axios.get(api)
         year: highestRatedAnime.attributes.endDate,
         img : highestRatedAnime.attributes.coverImage.original
     }
-    topAnime(data)
+    recAnime(data)
+    topAnime(topAnimes)
+    popularAnime(dataUnion)
 })
 
-function topAnime(data) {
+function recAnime(data) {
     const bg = document.querySelector('.top-anime')
     const animeDetail = document.querySelector('.anime-detail');
     const image = document.querySelector('.image')
@@ -146,4 +148,73 @@ function topAnime(data) {
     bg.style.backgroundRepeat = 'no-repeat';
     bg.style.backgroundSize = 'cover';
     bg.style.backgroundPosition = 'center center';
+  }
+
+  function topAnime(data) {
+    const slide = document.querySelector('.slide');
+    
+    data.forEach(anime => {
+        const data = {
+            title: anime.attributes.canonicalTitle,
+            synop: anime.attributes.synopsis,
+            eps: anime.attributes.episodeLength,
+            year: anime.attributes.endDate,
+            img : anime.attributes.coverImage.original
+        }
+        const {title , synop , eps , year, img} = data
+        const truncatedSynopsis = truncateText(synop, 300);
+        const animes = `
+        <div class="anime">
+            <div class="image-anime">
+              <img src="${img}" alt="">
+            </div>
+            <div class="anime-data">
+              <h1>${title}</h1>
+              <p>
+                ${truncatedSynopsis}
+              </p>
+              <ul>
+                <li>Episode : ${eps} Episode</li>
+                <li>Date : ${year}</li>
+                <li>Genre : Romance , Fantasi</li>
+              </ul>
+            </div>
+          </div>
+        `
+        slide.innerHTML += animes;
+    });
+  }
+
+  function popularAnime(data) {
+    const slider = document.querySelector('.slider-card')
+    data.forEach(anime => {
+        const data = {
+            title: anime.attributes.canonicalTitle,
+            synop: anime.attributes.synopsis,
+            eps: anime.attributes.episodeLength,
+            year: anime.attributes.endDate,
+            img : anime.attributes.posterImage.tiny
+        }
+        const {title , eps , year, img} = data
+        const card = `
+        <div class="card">
+              <div class="top">
+                <img src="${img}" alt="">
+              </div>
+              <div class="data">
+                <div class="head">
+                  <h1>${title} </h1>
+                  <p><i class='bx bxs-star'></i> <span>4.9</span></p>
+                </div>
+                <div class="body">
+                  <ul>
+                    <li><a href="">${eps}</a></li>
+                    <li><a href="">${year}</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        `
+        slider.innerHTML += card;
+    })
   }
