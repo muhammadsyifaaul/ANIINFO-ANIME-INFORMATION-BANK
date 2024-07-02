@@ -105,6 +105,9 @@ axios.get(api)
     const ratings =dataUnion.map(anime => parseFloat(anime.attributes.averageRating))
     const maxRating = Math.max(...ratings)
     const highestRatedAnime = dataUnion.find(anime => parseFloat(anime.attributes.averageRating) === maxRating)
+    const normalizeRating = (rating) => {
+      return (rating / 100) * 5;
+  }
     const sortedAnimes = dataUnion.sort((a, b) => {
         return parseFloat(b.attributes.averageRating) - parseFloat(a.attributes.averageRating);
     });
@@ -189,13 +192,17 @@ function recAnime(data) {
     const slider = document.querySelector('.slider-card')
     data.forEach(anime => {
         const data = {
+          id: anime.id,
             title: anime.attributes.canonicalTitle,
+            rating: anime.attributes.averageRating,
             synop: anime.attributes.synopsis,
             eps: anime.attributes.episodeLength,
             year: anime.attributes.endDate,
             img : anime.attributes.posterImage.tiny
         }
-        const {title , eps , year, img} = data
+        const {id, title ,rating, eps , year, img} = data
+        const roundedRating = (rating / 100 * 5).toFixed(1);
+        console.log(roundedRating)
         const card = `
         <div class="card">
               <div class="top">
@@ -203,8 +210,8 @@ function recAnime(data) {
               </div>
               <div class="data">
                 <div class="head">
-                  <h1>${title} </h1>
-                  <p><i class='bx bxs-star'></i> <span>4.9</span></p>
+                  <h1 data-id="${id}">${title} </h1>
+                  <p><i class='bx bxs-star'></i> <span>${roundedRating}</span></p>
                 </div>
                 <div class="body">
                   <ul>
@@ -218,3 +225,13 @@ function recAnime(data) {
         slider.innerHTML += card;
     })
   }
+
+  document.addEventListener('click', function(e) {
+    if (e.target.hasAttribute('data-id')) {
+      const dataId = e.target.getAttribute('data-id')
+      console.log(`Element has data-id: ${dataId}`);
+    } else {
+      console.log('Element does not have data-id');
+    }
+  });
+  
